@@ -1,0 +1,22 @@
+.upload-section {
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .file-name {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  textarea {
+    font-family: monospace;
+    font-size: 14px;
+  }
+  
+  .review-box {
+    background-color: #fff;
+    border-left: 4px solid #4caf50;
+  }
+  
