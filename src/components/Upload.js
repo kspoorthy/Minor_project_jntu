@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import './upload.css';
+import axios from 'axios';
 
 const Upload = () => {
   const [fileName, setFileName] = useState('');
   const [codeText, setCodeText] = useState('');
-  const [review, setReview] = useState("");
+  const [review, setReview] = useState('');
+  const [timeComplexity, setTimeComplexity] = useState('');
+  const [spaceComplexity, setSpaceComplexity] = useState('');
+  const [codeReview, setCodeReview] = useState('');
 
   const handleFileChange = (e) => {
     setFileName(e.target.files[0]?.name || '');
@@ -25,23 +29,41 @@ const Upload = () => {
     if (!fileName && !codeText.trim()) {
       alert('Please upload a file or enter some code.');
     }
-
-    // You can replace this with actual API logic
   };
 
-  const handleTimeComplexity = () => {
-    // logic for time complexity
+  const handleTimeComplexity = async () => {
+    if (!codeText.trim()) {
+      setReview("Please enter some code to analyze.");
+      return;
+    }
+
+    setReview("Analyzing time complexity...");
+    setTimeComplexity(""); // reset old result
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/analyze', {
+        code: codeText,
+      });
+
+      if (response.data?.timeComplexity) {
+        setTimeComplexity(`Time Complexity: ${response.data.timeComplexity}`);
+        setReview(""); // clear temporary message
+      } else {
+        setReview("Unable to determine time complexity.");
+      }
+    } catch (error) {
+      console.error("Error analyzing time complexity:", error);
+      setReview("An error occurred while analyzing.");
+    }
   };
-  
+
   const handleSpaceComplexity = () => {
-    // logic for space complexity
+     // placeholder
   };
 
   const reviewCode = () => {
-    // logic for space complexity
+     // placeholder
   };
-  
-  
 
   return (
     <section id="upload" className="upload-section">
@@ -73,9 +95,18 @@ const Upload = () => {
           </button>
         </div>
 
+        {(review || timeComplexity || spaceComplexity || codeReview) && (
+          <div className="results" style={{ marginTop: '20px', background: '#f9f9f9', padding: '10px', borderRadius: '8px' }}>
+            {review && <p>{review}</p>}
+            {timeComplexity && <p>{timeComplexity}</p>}
+            {spaceComplexity && <p>{spaceComplexity}</p>}
+            {codeReview && <p>{codeReview}</p>}
+          </div>
+        )}
       </form>
     </section>
   );
 };
 
 export default Upload;
+
